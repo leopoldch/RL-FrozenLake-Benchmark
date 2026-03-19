@@ -1,6 +1,7 @@
 import argparse
 from environments import EnvFactory
 from strategies import StrategyFactory
+from utils import plot_training_results
 
 
 def main():
@@ -9,6 +10,8 @@ def main():
     parser.add_argument("--strategy", type=str, default="random", help="Strategy key")
     parser.add_argument("--episodes", type=int, default=10, help="Amount of episodes")
     parser.add_argument("--render", action="store_true", help="Display the environment")
+    parser.add_argument("--plot", action="store_true", help="Display metrics after training")
+    parser.add_argument("--window", type=int, default=100, help="Window to smooth curves")
     args = parser.parse_args()
 
     render_mode = "human" if args.render else None
@@ -28,6 +31,8 @@ def main():
 
     successes = 0
     rewards_per_episode = []
+    holes_per_episode = []
+    successes_per_episode = []
     steps_per_episode = []
 
     for episode in range(args.episodes):
@@ -63,9 +68,12 @@ def main():
         )
         print(f"Episode {episode + 1:03d} | Steps: {step_count:03d} | Result: {status}")
 
-        if total_reward > 0:
+        success = total_reward > 0
+        if success:
             successes += 1
         rewards_per_episode.append(total_reward)
+        holes_per_episode.append(int(fell_in_hole))
+        successes_per_episode.append(int(success))
         steps_per_episode.append(step_count)
 
     success_rate = successes / args.episodes * 100
@@ -79,6 +87,17 @@ def main():
     print(f"Nb de steps moyen : {avg_steps}")
 
     env.close()
+
+    if args.plot:
+        plot_training_results(
+            rewards=rewards_per_episode,
+            holes=holes_per_episode,
+            successes=successes_per_episode,
+            steps=steps_per_episode,
+            window=args.window,
+            strategy=args.strategy,
+            env=args.env,
+        )
 
 
 if __name__ == "__main__":
