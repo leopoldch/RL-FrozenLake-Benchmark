@@ -26,11 +26,16 @@ def main():
     print(f"Strategy     : {args.strategy} ({agent.__class__.__name__})")
     print(f"Episodes      : {args.episodes}")
 
+    successes = 0
+    rewards_per_episode = []
+    steps_per_episode = []
+
     for episode in range(args.episodes):
         observation, info = env.reset()
         episode_over = False
         total_reward = 0
         step_count = 0
+        fell_in_hole = False
 
         while not episode_over:
             action = agent.select_action(observation, info)
@@ -52,13 +57,26 @@ def main():
 
             if terminated and reward == 0:  # we fell into a hole
                 fell_in_hole = True
-            else:
-                fell_in_hole = False
 
         status = (
             "Found !" if total_reward > 0 else ("Hole" if fell_in_hole else "Not found")
         )
         print(f"Episode {episode + 1:03d} | Steps: {step_count:03d} | Result: {status}")
+
+        if total_reward > 0:
+            successes += 1
+        rewards_per_episode.append(total_reward)
+        steps_per_episode.append(step_count)
+
+    success_rate = successes / args.episodes * 100
+    avg_reward = sum(rewards_per_episode) / args.episodes
+    avg_steps = sum(steps_per_episode) / args.episodes
+
+    print()
+    print(f"Résultats pour {args.episodes} episodes ---")
+    print(f"Success rate : {success_rate}%")
+    print(f"Reward moyen : {avg_reward}")
+    print(f"Nb de steps moyen : {avg_steps}")
 
     env.close()
 

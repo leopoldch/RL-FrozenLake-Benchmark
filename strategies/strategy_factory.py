@@ -1,4 +1,4 @@
-from strategies import RandomStrategy
+from .random_strategy import RandomStrategy
 
 # we need to import manually our strategies here
 

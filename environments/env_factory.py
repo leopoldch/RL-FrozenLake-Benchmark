@@ -1,5 +1,7 @@
 import gymnasium as gym
-from environments import DefaultConfig, RandomMap, CustomMap8x8
+from .default import DefaultConfig
+from .random import RandomMap
+from .custom8x8 import CustomMap8x8
 
 SEED = 42  # ask @Audrey
 MAX_EPISODE_STEPS = 100  # ask @Audrey
@@ -18,7 +20,8 @@ class EnvFactory:
     @staticmethod
     def create(env_name: str, render_mode: str = None) -> gym.Env:
         if env_name not in EnvFactory._configs:
-            raise ValueError("Unknown environment")
+            choices = list(EnvFactory._configs.keys())
+            raise ValueError(f"Unknown environment. Available: {choices}")
 
         config = EnvFactory._configs[env_name]()
 
@@ -31,7 +34,6 @@ class EnvFactory:
             map_name=config.map_name,
             is_slippery=config.is_slippery,
             render_mode=render_mode,
-            # max_episode_steps= MAX_EPISODE_STEPS to add in our configs ? fix only one
-            # ask @Audrey
+            max_episode_steps=MAX_EPISODE_STEPS,  # ask @Audrey
         )
         return env
