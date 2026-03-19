@@ -28,10 +28,10 @@ python main.py [--env ENV] [--strategy STRATEGY] [--episodes N] [--render]
 python main.py --episodes 100
 
 # Run with rendering enabled
-python main.py --env custom8x8 --strategy random --episodes 5 --render
+python main.py --env baseline --episodes 5 --render
 
 # Run a specific strategy silently
-python main.py --env default --strategy random --episodes 500
+python main.py --env baseline --strategy sarsa --episodes 500
 ```
 
 ## Code Formatting

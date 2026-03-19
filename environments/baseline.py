@@ -1,4 +1,4 @@
-class CustomMap8x8:
+class Baseline:
     def __init__(self):
         self.desc = [
             "SFFFFFFF",
@@ -6,11 +6,11 @@ class CustomMap8x8:
             "FFFHFFFF",
             "FFFFFHFF",
             "FFFHFFFF",
-            "FHHFFFHF",
-            "FHFFHFHF",
+            "FHHFFFFF",
+            "FHFFHFFF",
             "FFFHFFFG",
         ]
-        self.map_name = None  # no need as we defined the map ourselves
+        self.map_name = None
         self.is_slippery = True
-        self.success_rate = 1.0 / 3.0
-        self.reward_schedule = (1, 0, 0)
+        self.success_rate = 0.95
+        self.reward_schedule = (1, 0, 0)  # récompenses (victoire, trou, step)

@@ -1,4 +1,5 @@
 from .random_strategy import RandomStrategy
+from .sarsa import SarsaStrategy
 
 # we need to import manually our strategies here
 
@@ -6,6 +7,7 @@ from .random_strategy import RandomStrategy
 class StrategyFactory:
     _strategies = {
         "random": RandomStrategy,
+        "sarsa": SarsaStrategy,
         # we can add more strategies here
     }
 

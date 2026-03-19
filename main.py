@@ -73,7 +73,7 @@ def main():
     avg_steps = sum(steps_per_episode) / args.episodes
 
     print()
-    print(f"Résultats pour {args.episodes} episodes ---")
+    print(f"Résultats pour {args.episodes} episodes")
     print(f"Success rate : {success_rate}%")
     print(f"Reward moyen : {avg_reward}")
     print(f"Nb de steps moyen : {avg_steps}")

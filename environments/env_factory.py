@@ -1,7 +1,6 @@
 import gymnasium as gym
-from .default import DefaultConfig
 from .random import RandomMap
-from .custom8x8 import CustomMap8x8
+from .baseline import Baseline
 
 SEED = 42  # ask @Audrey
 MAX_EPISODE_STEPS = 100  # ask @Audrey
@@ -12,9 +11,8 @@ MAX_EPISODE_STEPS = 100  # ask @Audrey
 class EnvFactory:
 
     _configs = {
-        "default": DefaultConfig,
         "random": RandomMap,
-        "custom8x8": CustomMap8x8,
+        "baseline": Baseline,
     }
 
     @staticmethod
@@ -33,7 +31,10 @@ class EnvFactory:
             desc=config.desc,
             map_name=config.map_name,
             is_slippery=config.is_slippery,
+            success_rate=config.success_rate,
             render_mode=render_mode,
+            reward_schedule=config.reward_schedule,
             max_episode_steps=MAX_EPISODE_STEPS,  # ask @Audrey
         )
+
         return env
