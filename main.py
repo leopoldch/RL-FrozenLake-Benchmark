@@ -10,8 +10,12 @@ def main():
     parser.add_argument("--strategy", type=str, default="random", help="Strategy key")
     parser.add_argument("--episodes", type=int, default=10, help="Amount of episodes")
     parser.add_argument("--render", action="store_true", help="Display the environment")
-    parser.add_argument("--plot", action="store_true", help="Display metrics after training")
-    parser.add_argument("--window", type=int, default=100, help="Window to smooth curves")
+    parser.add_argument(
+        "--plot", action="store_true", help="Display metrics after training"
+    )
+    parser.add_argument(
+        "--window", type=int, default=100, help="Window to smooth curves"
+    )
     args = parser.parse_args()
 
     render_mode = "human" if args.render else None

@@ -2,7 +2,7 @@ from gymnasium.envs.toy_text.frozen_lake import generate_random_map
 
 
 class RandomMap:
-    def __init__(self, size=4):
+    def __init__(self, size=8):
         self.desc = generate_random_map(size=size)
         self.map_name = None
         self.is_slippery = True

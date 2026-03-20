@@ -1,4 +1,4 @@
-class Baseline:
+class Slippery:
     def __init__(self):
         self.desc = [
             "SFFFFFFF",
@@ -12,5 +12,5 @@ class Baseline:
         ]
         self.map_name = None
         self.is_slippery = True
-        self.success_rate = 0.95  # 5% de glisse
+        self.success_rate = 0.70  # 30% de glisse
         self.reward_schedule = (1, 0, 0)  # récompenses (victoire, trou, step)

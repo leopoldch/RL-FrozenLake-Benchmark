@@ -12,9 +12,9 @@ class SarsaStrategy(IStrategy):
         action_space,
         observation_space=None,
         # hyper params à fixer @Audrey
-        alpha=0.20,
+        alpha=0.05,
         gamma=0.99,
-        epsilon=0.15,
+        epsilon=0.05,
     ):
         super().__init__(action_space, observation_space)
         self.alpha = alpha

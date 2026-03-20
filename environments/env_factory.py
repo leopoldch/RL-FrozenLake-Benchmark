@@ -1,6 +1,8 @@
 import gymnasium as gym
 from .random import RandomMap
 from .baseline import Baseline
+from .slippery import Slippery
+from .dangerous import Dangerous
 
 SEED = 42  # ask @Audrey
 MAX_EPISODE_STEPS = 100  # ask @Audrey
@@ -13,6 +15,8 @@ class EnvFactory:
     _configs = {
         "random": RandomMap,
         "baseline": Baseline,
+        "slippery": Slippery,
+        "dangerous": Dangerous,
     }
 
     @staticmethod
