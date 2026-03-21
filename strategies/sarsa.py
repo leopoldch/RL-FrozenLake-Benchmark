@@ -6,7 +6,9 @@ class SarsaStrategy(IStrategy):
     """
     Basé sur le cours IFT-7201 (Audrey Durand)
     """
-
+    # on-policy
+    # normalement plus prudent
+    
     def __init__(
         self,
         action_space,

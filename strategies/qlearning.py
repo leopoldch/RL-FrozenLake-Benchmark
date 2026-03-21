@@ -6,6 +6,7 @@ class QLearningStrategy(IStrategy):
     """
     Basé sur le cours IFT-7201 (Audrey Durand)
     """
+    # off-policy
 
     def __init__(
         self,
