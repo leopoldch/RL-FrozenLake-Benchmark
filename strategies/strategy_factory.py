@@ -1,5 +1,6 @@
 from .random_strategy import RandomStrategy
 from .sarsa import SarsaStrategy
+from .qlearning import QLearningStrategy
 
 # we need to import manually our strategies here
 
@@ -8,6 +9,7 @@ class StrategyFactory:
     _strategies = {
         "random": RandomStrategy,
         "sarsa": SarsaStrategy,
+        "qlearning": QLearningStrategy,
         # we can add more strategies here
     }
 
