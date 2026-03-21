@@ -2,12 +2,15 @@ import gymnasium as gym
 from .random import RandomMap
 from .baseline import Baseline
 from .slippery import Slippery
-from .dangerous import Dangerous
+from .corridor import Corridor
 
 SEED = 42  # ask @Audrey
-MAX_EPISODE_STEPS = 100  # ask @Audrey
-# pas super propre de laisser ça là mais
-# OK
+MAX_EPISODE_STEPS = 80  # ask @Audrey
+# On peut le laisser à 80 si on garde des grilles 8x8
+# car 14 pas minimum pr atteindre la cible 
+# 80/14 = a peu pres la liberté de l'agent
+# 80/14 = 5.7 environ eet donc liberté de faire 
+# 5.7 fois la distance minimum 
 
 
 class EnvFactory:
@@ -16,7 +19,7 @@ class EnvFactory:
         "random": RandomMap,
         "baseline": Baseline,
         "slippery": Slippery,
-        "dangerous": Dangerous,
+        "corridor": Corridor,
     }
 
     @staticmethod
