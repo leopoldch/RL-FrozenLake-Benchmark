@@ -4,7 +4,6 @@ from .baseline import Baseline
 from .slippery import Slippery
 from .corridor import Corridor
 
-SEED = 42  # ask @Audrey
 MAX_EPISODE_STEPS = 80  # ask @Audrey
 # On peut le laisser à 80 si on garde des grilles 8x8
 # car 14 pas minimum pr atteindre la cible 
@@ -31,7 +30,7 @@ class EnvFactory:
         config = EnvFactory._configs[env_name]()
 
         if env_name == "random":
-            config.seed = SEED
+            config.seed = 42 # should not be used in our project 
 
         env = gym.make(
             "FrozenLake-v1",  # shouldn't change as we created the whole program around this
@@ -41,7 +40,7 @@ class EnvFactory:
             success_rate=config.success_rate,
             render_mode=render_mode,
             reward_schedule=config.reward_schedule,
-            max_episode_steps=MAX_EPISODE_STEPS,  # ask @Audrey
+            max_episode_steps=MAX_EPISODE_STEPS,
         )
 
         return env
