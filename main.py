@@ -1,8 +1,12 @@
 import argparse
+import os
+import random
+
+import numpy as np
+
 from environments import EnvFactory
 from strategies import StrategyFactory
-import random
-import numpy as np
+from utils import plot_training_results, plot_policy
 
 
 def main():
@@ -16,6 +20,10 @@ def main():
     parser.add_argument("--render", action="store_true", help="Display the environment")
     parser.add_argument(
         "--plot", action="store_true", help="Display metrics after training"
+    )
+    parser.add_argument("--window", type=int, default=200, help="Smoothing window size")
+    parser.add_argument(
+        "--save-dir", type=str, default="figures", help="Directory to save figures"
     )
     args = parser.parse_args()
 
@@ -39,6 +47,7 @@ def main():
         holes_per_episode = []
         successes_per_episode = []
         steps_per_episode = []
+        successful_steps_per_episode = []
 
         for episode in range(args.episodes):
             if episode == 0:
@@ -78,7 +87,9 @@ def main():
             holes_per_episode.append(int(fell_in_hole))
             successes_per_episode.append(int(success))
             steps_per_episode.append(step_count)
+            successful_steps_per_episode.append(step_count if success else np.nan)
 
+        desc = env.unwrapped.desc
         env.close()
 
         success_rate = successes / args.episodes * 100
@@ -86,10 +97,18 @@ def main():
         avg_steps = sum(steps_per_episode) / args.episodes
 
         return {
+            "seed": seed,
             "success_rate": success_rate,
             "avg_reward": avg_reward,
             "avg_steps": avg_steps,
             "total_holes": sum(holes_per_episode),
+            "rewards_per_episode": rewards_per_episode,
+            "holes_per_episode": holes_per_episode,
+            "successes_per_episode": successes_per_episode,
+            "steps_per_episode": steps_per_episode,
+            "successful_steps_per_episode": successful_steps_per_episode,
+            "final_q": agent.q.copy() if hasattr(agent, "q") else None,
+            "desc": desc,
         }
 
     print(f"Environment : {args.env}")
@@ -108,22 +127,56 @@ def main():
         print(f"  Success rate : {result['success_rate']:.1f}%")
         print(f"  Avg reward   : {result['avg_reward']:.3f}")
         print(f"  Avg steps    : {result['avg_steps']:.1f}")
-        print(f"  total holes  : {result['total_holes']}")
+        print(f"  Total holes  : {result['total_holes']}")
         print()
 
-    if args.iterations > 1:
-        avg_sr = sum(r["success_rate"] for r in iteration_results) / args.iterations
-        avg_rw = sum(r["avg_reward"] for r in iteration_results) / args.iterations
-        avg_st = sum(r["avg_steps"] for r in iteration_results) / args.iterations
-        avg_holes = sum(r["total_holes"] for r in iteration_results) / args.iterations
-        print(f"=== Moyenne sur {args.iterations} itérations ===")
-        print(f"  Success rate : {avg_sr:.1f}%")
-        print(f"  Avg reward   : {avg_rw:.3f}")
-        print(f"  Avg steps    : {avg_st:.1f}")
-        print(f"  Avg holes    : {avg_holes:.1f}")
+    # résumé avec IC95
+    n = args.iterations
+    sr = np.array([r["success_rate"] for r in iteration_results])
+    rw = np.array([r["avg_reward"] for r in iteration_results])
+    st = np.array([r["avg_steps"] for r in iteration_results])
+    hl = np.array([r["total_holes"] for r in iteration_results])
 
-    # if args.plot:
-    #    plot_training_results()
+    def format_interval(values):
+        mean = np.mean(values)
+        if n > 1:
+            ci = 1.96 * np.std(values, ddof=1) / np.sqrt(n)
+            return f"{mean:.2f} ± {ci:.2f}"
+        return f"{mean:.2f}"
+
+    print(f"=== Résumé sur {n} itération(s) ===")
+    print(f"  Success rate : {format_interval(sr)}%")
+    print(f"  Avg reward   : {format_interval(rw)}")
+    print(f"  Avg steps    : {format_interval(st)}")
+    print(f"  Total holes  : {format_interval(hl)}")
+
+    if args.plot:
+        os.makedirs(args.save_dir, exist_ok=True)
+
+        plot_training_results(
+            iteration_results=iteration_results,
+            strategy=args.strategy,
+            env=args.env,
+            window=args.window,
+            save_path=os.path.join(
+                args.save_dir, f"training_{args.env}_{args.strategy}.png"
+            ),
+        )
+
+        # policy plot : on choisit le run le plus proche de la médiane
+        median_sr = np.median(sr)
+        best_idx = int(np.argmin(np.abs(sr - median_sr)))
+        best_run = iteration_results[best_idx]
+
+        if best_run["final_q"] is not None:
+            plot_policy(
+                q_table=best_run["final_q"],
+                desc=best_run["desc"],
+                title=f"Policy {args.strategy} / {args.env} (seed={best_run['seed']})",
+                save_path=os.path.join(
+                    args.save_dir, f"policy_{args.env}_{args.strategy}.png"
+                ),
+            )
 
 
 if __name__ == "__main__":

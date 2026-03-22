@@ -1,1 +1,1 @@
-from .visuals import plot_training_results
+from .visuals import plot_training_results, plot_policy
