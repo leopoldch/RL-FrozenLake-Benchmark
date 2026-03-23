@@ -4,7 +4,7 @@ A modular reinforcement learning sandbox built around the FrozenLake environment
 
 ## Installation
 ```bash
-uv install
+uv sync
 source .venv/bin/activate
 ```
 
