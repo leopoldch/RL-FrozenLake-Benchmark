@@ -13,4 +13,4 @@ class Corridor:
         self.map_name = None
         self.is_slippery = True
         self.success_rate = 0.70
-        self.reward_schedule = (1, 0, 0)
+        self.reward_schedule = (1, -1, 0)

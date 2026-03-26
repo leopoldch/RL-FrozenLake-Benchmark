@@ -13,9 +13,9 @@ def main():
     parser = argparse.ArgumentParser(description="RL FrozenLake")
     parser.add_argument("--env", type=str, default="random", help="Environment key")
     parser.add_argument("--strategy", type=str, default="random", help="Strategy key")
-    parser.add_argument("--episodes", type=int, default=10, help="Amount of episodes")
+    parser.add_argument("--episodes", type=int, default=60000, help="Amount of episodes")
     parser.add_argument(
-        "--iterations", type=int, default=1, help="Number of iterations"
+        "--iterations", type=int, default=20, help="Number of iterations"
     )
     parser.add_argument("--render", action="store_true", help="Display the environment")
     parser.add_argument(
@@ -41,6 +41,7 @@ def main():
             observation_space=env.observation_space,
         )
         env.action_space.seed(seed)
+        state_tiles = env.unwrapped.desc.ravel()
 
         successes = 0
         rewards_per_episode = []
@@ -58,6 +59,7 @@ def main():
             total_reward = 0
             step_count = 0
             fell_in_hole = False
+            reached_goal = False
 
             while not episode_over:
                 action = agent.select_action(observation, info)
@@ -77,10 +79,14 @@ def main():
                 step_count += 1
                 episode_over = terminated or truncated
 
-                if terminated and reward == 0:  # we fell into a hole
+                #détecte la fin via la case atteinte, pas via la récompense!
+                terminal_tile = state_tiles[next_observation]
+                if terminated and terminal_tile == b"H":
                     fell_in_hole = True
+                elif terminated and terminal_tile == b"G":
+                    reached_goal = True
 
-            success = total_reward > 0
+            success = reached_goal
             if success:
                 successes += 1
             rewards_per_episode.append(total_reward)

@@ -97,7 +97,7 @@ def plot_training_results(iteration_results, strategy, env, window, save_path=No
     ax.fill_between(
         x_full, ch_mean - ch_ci, ch_mean + ch_ci, alpha=0.25, color="darkorange"
     )
-    ax.set_title(f"Chutes cumulées (total : {ch_mean[-1]:.0f})")
+    ax.set_title(f"Chutes cumulées (total : {ch_mean[-1]:.2f})")
     ax.set_ylabel("Nb de chutes")
 
     # longueur des épisodes réussis

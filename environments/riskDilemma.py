@@ -13,6 +13,6 @@ class RiskDilemma:
         self.map_name = None
         self.is_slippery = True
         self.success_rate = 0.7
-        self.reward_schedule = (1, 0, 0)
+        self.reward_schedule = (1, -1, 0)
 
 

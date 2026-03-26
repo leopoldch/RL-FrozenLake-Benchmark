@@ -14,7 +14,7 @@ class QLearningStrategy(IStrategy):
         observation_space=None,
         # hyper params 
         alpha=0.1,
-        gamma=0.9,
+        gamma=1,
         epsilon=0.1,
     ):
         super().__init__(action_space, observation_space)
@@ -25,7 +25,7 @@ class QLearningStrategy(IStrategy):
         n_states = observation_space.n
         n_actions = action_space.n
 
-        self.q = np.zeros((n_states, n_actions))
+        self.q = np.zeros((n_states, n_actions)) # init à 0
 
     def select_action(self, observation, info=None):
         if np.random.random() < self.epsilon:

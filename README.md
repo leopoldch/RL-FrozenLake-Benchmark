@@ -28,7 +28,12 @@ python main.py [--env ENV] [--strategy STRATEGY] [--episodes N] [--iterations N]
 
 ### Examples
 ```bash
-# Run 5000 episodes with SARSA on baseline, 20 iterations, save figures
+
+python main.py --env baseline --strategy sarsa --episodes 15000 --iterations 20 --plot --save-dir figures
+
+python main.py --env slippery --strategy qlearning --episodes 15000 --iterations 20 --plot --save-dir figures
+
+# Run 5000 episodes with SARSA on baseline, 20 iterations
 python main.py --env baseline --strategy sarsa --episodes 5000 --iterations 20 --plot
 
 # Run with Q-Learning on corridor
