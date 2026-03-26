@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 # nombre cumulé de chutes
 # longueur moyenne des épisodes réussis
 
-# @Audrey t'es OK avec ça ?
 
 
 def moving_average(x, window):
