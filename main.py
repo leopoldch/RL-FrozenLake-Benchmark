@@ -154,7 +154,11 @@ def main():
     print(f"  Success rate : {format_interval(sr)}%")
     print(f"  Avg reward   : {format_interval(rw)}")
     print(f"  Avg steps    : {format_interval(st)}")
+    succ_steps = np.array([np.nanmean(r["successful_steps_per_episode"]) for r in iteration_results])
+    print(f"  Avg steps (success) : {format_interval(succ_steps)}")
     print(f"  Total holes  : {format_interval(hl)}")
+    fall_pct = hl / args.episodes * 100
+    print(f"  Fall rate    : {format_interval(fall_pct)}%")
 
     if args.plot:
         os.makedirs(args.save_dir, exist_ok=True)
