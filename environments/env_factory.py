@@ -3,12 +3,13 @@ from .random import RandomMap
 from .baseline import Baseline
 from .slippery import Slippery
 from .corridor import Corridor
+from .riskDilemma import RiskDilemma
 
-MAX_EPISODE_STEPS = 80  # ask @Audrey
+MAX_EPISODE_STEPS = 80  
 # On peut le laisser à 80 si on garde des grilles 8x8
 # car 14 pas minimum pr atteindre la cible 
 # 80/14 = a peu pres la liberté de l'agent
-# 80/14 = 5.7 environ eet donc liberté de faire 
+# 80/14 = 5.7 environ et donc liberté de faire 
 # 5.7 fois la distance minimum 
 
 
@@ -19,6 +20,7 @@ class EnvFactory:
         "baseline": Baseline,
         "slippery": Slippery,
         "corridor": Corridor,
+        "riskDilemma": RiskDilemma
     }
 
     @staticmethod

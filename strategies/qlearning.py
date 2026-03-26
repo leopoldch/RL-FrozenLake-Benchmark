@@ -12,10 +12,10 @@ class QLearningStrategy(IStrategy):
         self,
         action_space,
         observation_space=None,
-        # hyper params à fixer @Audrey
-        alpha=0.05,
-        gamma=0.99,
-        epsilon=0.05,
+        # hyper params 
+        alpha=0.1,
+        gamma=0.9,
+        epsilon=0.1,
     ):
         super().__init__(action_space, observation_space)
         self.alpha = alpha
