@@ -13,7 +13,9 @@ def main():
     parser = argparse.ArgumentParser(description="RL FrozenLake")
     parser.add_argument("--env", type=str, default="random", help="Environment key")
     parser.add_argument("--strategy", type=str, default="random", help="Strategy key")
-    parser.add_argument("--episodes", type=int, default=60000, help="Amount of episodes")
+    parser.add_argument(
+        "--episodes", type=int, default=60000, help="Amount of episodes"
+    )
     parser.add_argument(
         "--iterations", type=int, default=20, help="Number of iterations"
     )
@@ -114,6 +116,7 @@ def main():
             "steps_per_episode": steps_per_episode,
             "successful_steps_per_episode": successful_steps_per_episode,
             "final_q": agent.q.copy() if hasattr(agent, "q") else None,
+            "bound_violations": getattr(agent, "bound_violations", 0),
             "desc": desc,
         }
 
@@ -134,6 +137,8 @@ def main():
         print(f"  Avg reward   : {result['avg_reward']:.3f}")
         print(f"  Avg steps    : {result['avg_steps']:.1f}")
         print(f"  Total holes  : {result['total_holes']}")
+        if result["bound_violations"] > 0:
+            print(f"  Bound viol.  : {result['bound_violations']}")
         print()
 
     # résumé avec IC95
@@ -142,6 +147,7 @@ def main():
     rw = np.array([r["avg_reward"] for r in iteration_results])
     st = np.array([r["avg_steps"] for r in iteration_results])
     hl = np.array([r["total_holes"] for r in iteration_results])
+    bv = np.array([r["bound_violations"] for r in iteration_results])
 
     def format_interval(values):
         mean = np.mean(values)
@@ -154,11 +160,15 @@ def main():
     print(f"  Success rate : {format_interval(sr)}%")
     print(f"  Avg reward   : {format_interval(rw)}")
     print(f"  Avg steps    : {format_interval(st)}")
-    succ_steps = np.array([np.nanmean(r["successful_steps_per_episode"]) for r in iteration_results])
+    succ_steps = np.array(
+        [np.nanmean(r["successful_steps_per_episode"]) for r in iteration_results]
+    )
     print(f"  Avg steps (success) : {format_interval(succ_steps)}")
     print(f"  Total holes  : {format_interval(hl)}")
     fall_pct = hl / args.episodes * 100
     print(f"  Fall rate    : {format_interval(fall_pct)}%")
+    if np.any(bv > 0):
+        print(f"  Bound viol.  : {format_interval(bv)}")
 
     if args.plot:
         os.makedirs(args.save_dir, exist_ok=True)
